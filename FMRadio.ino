@@ -1,10 +1,8 @@
-/*  Arduino FM Radio Code
- *  Author: Angelina Wang
+/*  Arduino FM Radio
+ *  Author: mthrange
  *  Date: January 19th, 2024
- *  
- *  Description: Program for an FM Radio of frequency 88.0 to 108.0 with stereo audio, volume control, 
+ *  Description: FM Radio of frequency 88.0 to 108.0 with stereo audio, volume control, 
  *  and a tuning function using a rotary encoder and a liquid crystal display.
- * 
  */
 
 #include <LiquidCrystal.h> 
@@ -15,7 +13,7 @@
 TEA5767Radio radio = TEA5767Radio(); 
 float station = 99.1;
 float prevStation = 99.1;
-unsigned long last_run =0;
+unsigned long last_run = 0;
 
 //declare variables for display
 const int RS=8, EN=9, D4=10, D5=11, D6=12, D7=13;
@@ -39,27 +37,29 @@ void setup() {
   pinMode(pinSW, INPUT_PULLUP);
 }
 
+//rotary encoder
 void shaft_moved(){
   if(millis()-last_run>5){
-  if (digitalRead(pinDT) == 1){
-    station = station - 0.1;
-
-       if (station < 88.0) {
-      station = 108.0;
-    }                   
+    //counter-clockwise
+    if (digitalRead(pinDT) == 1){
+      station = station - 0.1;
+      if (station < 88.0) {
+        station = 108.0;
+      }                   
+    }
+    //clockwise
+    if (digitalRead(pinDT) == 0){
+      station = station + 0.1;
+      if (station > 108.0) {
+        station = 88.0;
+      } 
+    }
   }
-  if (digitalRead(pinDT) == 0){
-    station = station + 0.1;
-    if (station > 108.0) {
-      station = 88.0;
-    } 
-  }
-}
   last_run = millis();
 }
 
 void loop() {
-   //set new frequency only when the station has been changed (prevents background clicking noise that occurs when frequency is set)
+  //set new frequency only when the station has been changed (prevents background clicking noise that occurs when frequency is set)
   if (prevStation != station){
     radio.setFrequency(station);
   }
