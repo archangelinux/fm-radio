@@ -1,5 +1,5 @@
 /*  Arduino FM Radio
- *  Author: mthrange
+ *  Author: Angie Bai
  *  Date: January 19th, 2024
  *  Description: FM Radio of frequency 88.0 to 108.0 with stereo audio, volume control, 
  *  and a tuning function using a rotary encoder and a liquid crystal display.
